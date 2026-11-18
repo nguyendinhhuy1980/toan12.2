@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="vi"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Làm bài Vectơ trong không gian – Đề 02B – Biên soạn: thầy Nguyễn Đình Huy</title>
+<style>
+:root{--bg:#f6f7fb;--card:#fff;--tx:#1b2333;--mu:#5b6578;--pr:#2457c5;--bd:#d5dae5;--bad:#c0392b;--ok:#1e8449;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#14171f;--card:#1d2230;--tx:#e8ebf3;--mu:#9aa3b8;--pr:#6c9bff;--bd:#343b50;--bad:#ff7a6b;--ok:#5fd08a;color-scheme:dark}}
+html,body{margin:0}body{background:var(--bg);color:var(--tx);font:16px/1.55 "Times New Roman",serif;user-select:none}
+main{max-width:820px;margin:0 auto;padding:14px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:14px 16px;margin:12px 0}
+h1{font-size:21px;margin:6px 0;color:var(--pr)}h2{font-size:18px;margin:16px 0 6px;color:var(--pr)}
+select,input,button{font:inherit;color:inherit}select,input[type=text]{background:var(--card);border:1px solid var(--bd);border-radius:6px;padding:8px;width:100%;box-sizing:border-box;margin:4px 0 10px}
+button{background:var(--pr);color:#fff;border:0;border-radius:8px;padding:10px 18px;cursor:pointer;margin:4px 6px 4px 0}button.g{background:transparent;color:var(--pr);border:1px solid var(--pr)}button:disabled{opacity:.5}
+.v{display:inline-block;position:relative;font-style:italic;margin-top:.5em}.v::after{content:"→";position:absolute;left:0;right:0;top:-.85em;text-align:center;font-size:.75em;font-style:normal;line-height:1}
+.opt{display:block;padding:4px 6px;border-radius:6px;cursor:pointer}.opt:hover{background:rgba(120,140,200,.15)}.opt input{margin-right:8px}
+.q{margin:12px 0;padding-bottom:6px;border-bottom:1px dashed var(--bd)}.row{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+#bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:8px 14px;display:flex;justify-content:space-between;align-items:center;margin-top:0}
+#tm{font-size:22px;font-weight:bold;font-variant-numeric:tabular-nums}.bad{color:var(--bad)}.ok{color:var(--ok)}.mu{color:var(--mu);font-size:14px}
+table{border-collapse:collapse;width:100%;font-size:14px}th,td{border:1px solid var(--bd);padding:4px 6px;text-align:left}.sc{overflow-x:auto}
+input.a{width:140px;display:inline-block;margin:0 0 0 8px}ul{margin:6px 0;padding-left:22px}
+</style></head><body><main id="app"><div class="card">Đang tải…</div></main><div class=mu style="text-align:center;padding:6px 0 18px">Biên soạn: thầy Nguyễn Đình Huy</div>
+<script>
+// ===== CẤU HÌNH: dán link Web App (kết thúc bằng /exec) vào đây =====
+const API="https://script.google.com/macros/s/AKfycbyfZTT7w8VjmEEr-tdWP3d9YI0Sv86AxZbol4K1i0Qi9HiMWcQ7akFYuXqzhKFMT2QxZg/exec";
+// ====================================================================
+const TIME=50, MAXTRY=2, CLS="12A4";
+const NAMES="Võ Thị Kiều Anh|Nguyễn Trương Ngọc Ánh|Hoàng Quách Gia Bảo|Hoàng Quang Bảo|Trần Gia Bảo|Nguyễn Hữu Bình|Hoàng Ngọc Chánh|Nguyễn Quang Trung Chính|Ngô Hải Dương|Đào Đoàn Thu Hà|Lê Thanh Hải|Hoàng Thị Thanh Hằng|Lê Thế Hoài|Lê Văn Quốc Hoàng|Trần Huy|Lương Văn Chánh Hưng|Đoàn Nguyễn Mạnh Hướng|Đỗ Đình Bảo Khoa|Trần Anh Tuấn Kiệt|Hoàng Thị Lan|Trịnh Ngọc Lân|Đinh Thị Phượng Linh|Trần Ngọc Long|Trần Nhật Minh|Lê Trần Quang Nguyên|Phan Minh Nguyên|Trần Thị Trang Nhã|Phan Minh Nhật|Hoàng Tuệ Như|Nguyễn Hữu Phú|Nguyễn Thanh Phúc|Võ Thanh Phúc|Lê Anh Quân|Nguyễn Thiện Quân|Trần Minh Quân|Cao Xuân Quý|Mai Thị Diễm Quỳnh|Lê Chí Tài|Mai Thanh Tâm|Đoàn Phương Thảo|Trần Vinh Bảo Thắng|Nguyễn Thị Thanh Thúy|Hoàng Trần Anh Thư|Đỗ Khánh Toàn|Võ Ngọc Quỳnh Trâm|Đoàn Khánh Trinh|TEST1|TEST2|TEST3|TEST4".split("|");
+// Phần I: [đề, 4 đáp án, chỉ số đúng]
+const P1=[
+["Lăng trụ ABC.A′B′C′. Đặt {AA′}={a}, {AB}={b}, {AC}={c}, {BC}={d}. Biểu thức nào đúng?",["{a}={b}+{c}","{a}+{b}+{c}+{d}={0}","{b}−{c}+{d}={0}","{a}+{b}+{c}={d}"],2],
+["Hình lập phương ABCD.A′B′C′D′ cạnh 1. Độ dài của {AC}+{C′D′} là:",["√3","√2","1","2√2"],2],
+["O là tâm hình bình hành ABCD. Vectơ {AO}−{DO} bằng:",["{BA}","{AD}","{DC}","{AC}"],1],
+["Hình hộp ABCD.A′B′C′D′. Khẳng định nào đúng?",["{AB}+{AC}+{AD}={AC′}","{AB}+{AA′}+{AD}={AC′}","{AB}+{AA′}+{AD}={AC}","{AB}+{AA′}+{AD}={0}"],1],
+["Tam giác ABC có trọng tâm G, điểm M nằm ngoài mặt phẳng (ABC). Khẳng định nào đúng?",["{MA}+{MB}+{MC}={0}","{GA}+{GB}+{GC}=3{MG}","{MA}+{MB}+{MC}={MG}","{MA}+{MB}+{MC}=3{MG}"],3],
+["Hình chóp đều S.ABCD có tất cả các cạnh bằng 2√3. Độ dài của {u}={SA}−{SC} là:",["√3","√2","2√6","2√2"],2],
+["Tứ diện ABCD. Mệnh đề nào đúng?",["{BC}−{BA}={DA}−{DC}","{AC}−{AD}={BD}−{BC}","{AB}−{AC}={DB}−{DC}","{AB}−{AD}={CD}−{CB}"],2],
+["Lăng trụ ABC.A′B′C′, M là trung điểm BB′. Đặt {CA}={a}, {CB}={b}, {AA′}={c}. Khi đó {AM} bằng:",["{b}+{c}−½{a}","{a}−{c}+½{b}","{a}+{c}−½{b}","{b}−{a}+½{c}"],3],
+["Hình lập phương ABCD.A′B′C′D′ cạnh a. Độ dài của {x}={A′C′}−{A′A} là:",["a√2","a√3/2","a√6","a√3"],3],
+["Tứ diện S.ABC; M, N, P là trung điểm SA, SB, SC. Khẳng định nào đúng?",["{AB}=½({PN}−{PM})","{AB}={PN}−{PM}","{AB}=2({PM}−{PN})","{AB}=2({PN}−{PM})"],3],
+["Tứ diện S.ABC có đáy là tam giác đều cạnh a, SB ⊥ đáy, SB=a√3. Góc giữa hai vectơ {AB}, {AS} là:",["60°","30°","45°","90°"],0],
+["Cho tam giác ABC có AB=4, ∠BAC=60°, {AB}·{AC}=6. Độ dài AC là:",["3","6","4","12"],0]];
+// Phần II: [đề, 4 mệnh đề, đúng/sai]
+const P2=[
+["Chóp S.ABCD đáy chữ nhật, AB=a, AD=2a, SA=2a, SA ⊥ (ABCD). M, N là trung điểm SB, SD.",["{AB}, {CD} là hai vectơ cùng phương, cùng hướng.","Góc giữa hai vectơ {SC} và {AC} bằng 60°.","Tích vô hướng {AM}·{AB}=a²/2.","Độ dài của {AM}−{AN} là a√3/2."],[0,0,1,0]],
+["Tứ diện ABCD. M, N, P, Q, R, S lần lượt là trung điểm AB, CD, AC, BD, AD, BC; G là trung điểm MN.",["{MR}={SN}.","{GA}+{GB}+{GC}+{GD}={0}.","2{PQ}={AB}+{AC}+{AD}.","|{IA}+{IB}+{IC}+{ID}| nhỏ nhất khi và chỉ khi I trùng G."],[1,1,0,1]],
+["Hình hộp chữ nhật ABCD.EFGH, AB=AE=2, AD=3; đặt {a}={AB}, {b}={AD}, {c}={AE}. Lấy M: {AM}=⅕{AD}; N: {EN}=⅖{EC}.",["{MA}=−⅕{b}.","{EN}=⅖({a}−{b}+{c}).","(m{a}+n{b}+p{c})² = m²{a}²+n²{b}²+p²{c}² với m, n, p là các số thực.","MN=√61/5."],[1,0,1,1]],
+["Tứ diện đều ABCD cạnh a. E là điểm trên đoạn CD sao cho ED=2CE.",["Có 6 vectơ khác {0} có điểm đầu và điểm cuối là các đỉnh của tứ diện.","Góc giữa hai vectơ {AB} và {BC} bằng 60°.","Nếu {BE}=m{BA}+n{BC}+p{BD} thì m+n+p=2/3.","Tích vô hướng {AD}·{BE}=a²/6."],[0,0,0,1]]];
+// Phần III: [đề, đáp số]
+const P3=[
+["Tứ diện ABCD. Trên AD, BC lấy M, N sao cho AM=3MD, BN=3NC. P, Q là trung điểm AD, BC. Phân tích {MN}=a{PQ}+b{DC}. Tính a+2b.",1.5],
+["Hai vectơ {a}, {b} cùng độ dài 6, |{a}+2{b}|=6√3. Số đo góc giữa {a} và {b} là x độ. Tìm x.",120],
+["Tứ diện đều ABCD cạnh 15. |{AB}+{AC}+{AD}|=a√6. Tìm a.",15],
+["Hình lập phương ABCD.A′B′C′D′ có đường chéo A′C=3/16. O là tâm hình vuông ABCD, điểm S thỏa {OS}={OA}+{OB}+{OC}+{OD}+{OA′}+{OB′}+{OC′}+{OD′}. Khi đó OS=a√3/b (a, b∈ℕ, a/b tối giản). Tính P=a²+b².",17],
+["Cân đòn tay cân vật m=3 kg, đĩa cân giữ bởi bốn xích SA, SB, SC, SD với S.ABCD là chóp tứ giác đều có ∠ASC=90°. Lực căng mỗi sợi xích có độ lớn a√2/4 (N). Lấy g=10 m/s². Tìm a.",30],
+["Lực cản của không khí ngược hướng với lực đẩy và có độ lớn tỉ lệ với bình phương vận tốc. Máy bay tăng vận tốc từ 900 km/h lên 920 km/h, giữ nguyên hướng bay. Lực cản ở 900 và 920 km/h lần lượt là {F₁}, {F₂} với {F₁}=k{F₂} (k>0). Tính k (làm tròn đến chữ số thập phân thứ hai).",0.96]];
+
+const $=s=>document.querySelector(s), app=$("#app"), fmt=s=>s.replace(/\{([^}]+)\}/g,"<span class=v>$1</span>"), pad=n=>String(n).padStart(2,"0");
+const clock=d=>{d=new Date(d);return pad(d.getHours())+":"+pad(d.getMinutes())+":"+pad(d.getSeconds())};
+const dt=d=>{d=new Date(d);return pad(d.getDate())+"/"+pad(d.getMonth()+1)+" "+clock(d)};
+let st={},live=false,timer,viol=[],A,S,bc;
+const nul=()=>({A1:Array(12).fill(null),A2:P2.map(()=>Array(4).fill(null)),A3:Array(6).fill("")});
+
+const sh=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const shuf=()=>({p1:sh([...Array(12).keys()]).map(q=>({q,o:sh([0,1,2,3])})),p2:sh([0,1,2,3]).map(q=>({q,s:sh([0,1,2,3])})),p3:sh([0,1,2,3,4,5])});
+const persist=()=>{try{localStorage.setItem("ex_"+st.key,JSON.stringify({A,S}))}catch(e){}};
+const wait=(ms,m)=>new Promise((_,rj)=>setTimeout(()=>rj(new Error(m||"quá thời gian chờ")),ms));
+async function api(b){
+  const f=fetch(API,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(b)}).then(r=>r.json());
+  return Promise.race([f,wait(25000)]);
+}
+function grade(A,S){
+  const p1=S.p1.reduce((t,x,i)=>t+(A.A1[i]!==null&&x.o[A.A1[i]]===P1[x.q][2]?.25:0),0);
+  const p2=S.p2.reduce((t,x,i)=>t+[0,.1,.25,.5,1][A.A2[i].filter((v,k)=>v===P2[x.q][2][x.s[k]]).length],0);
+  const p3=S.p3.reduce((t,q,i)=>{const y=parseFloat(String(A.A3[i]).replace(",","."));return t+(Math.abs(y-P3[q][1])<1e-6?.5:0)},0);
+  return {p1,p2,p3,score:Math.round((p1+p2+p3)*100)/100};
+}
+function init(){login()}
+function login(){
+  app.innerHTML=`<h1>Kiểm tra Chương II – Vectơ trong không gian (Đề 02B)</h1><div class=mu>Biên soạn: thầy Nguyễn Đình Huy</div>
+  <div class=card><b>Chọn lớp và tên của em để vào làm bài</b><br>
+  <label class=mu>Lớp</label><select id=cl><option value="">-- Chọn lớp --</option><option>${CLS}</option></select>
+  <label class=mu>Họ và tên</label><select id=nm disabled><option value="">-- Chọn tên --</option></select>
+  <button id=go disabled>Tiếp tục</button><div id=msg class=bad></div></div><div id=ping class=mu>Đang kiểm tra kết nối máy chủ chấm điểm…</div></div>
+  <div class="card mu">Thời gian: ${TIME} phút. Tối đa ${MAXTRY} lượt làm. Đề được xáo thứ tự câu và đáp án ở mỗi lượt. Bất kỳ vi phạm nào (chuyển tab/cửa sổ, mở thêm cửa sổ, sao chép, dùng phím tắt, tải lại trang…) sẽ bị <b>nộp bài ngay và dừng làm</b>.</div>`;
+  const cl=$("#cl"),nm=$("#nm"),go=$("#go");
+  cl.onchange=()=>{nm.disabled=!cl.value;nm.innerHTML='<option value="">-- Chọn tên --</option>'+(cl.value?NAMES.map((n,i)=>`<option value=${i}>${i+1}. ${n}</option>`).join(""):"");go.disabled=true};
+  nm.onchange=()=>go.disabled=nm.value==="";
+  go.onclick=()=>enter(+nm.value);
+  ping();
+}
+async function ping(){const p=$("#ping");
+  try{const j=await Promise.race([fetch(API).then(r=>r.json()),wait(15000)]);if(!j.ok)throw 0;
+    p.innerHTML='<span class=ok>✔ Đã kết nối máy chủ chấm điểm.</span>'}
+  catch(e){p.innerHTML='<span class=bad>✖ Chưa kết nối được máy chủ chấm điểm ('+((e&&e.message)||"lỗi")+'). Báo giáo viên kiểm tra link Apps Script (quyền “Bất kỳ ai”, đã triển khai phiên bản mới) và mở trang này ngoài claude.ai.</span>'}}
+async function enter(i){
+  const m=$("#msg");$("#go").disabled=true;m.textContent="Đang kiểm tra…";
+  st={i,name:NAMES[i],key:CLS+"_"+pad(i+1)};
+  try{
+    const d=await api({action:"check",key:st.key,cls:CLS,name:st.name});
+    if(!d.ok)throw new Error(d.error);
+    st.n=d.n||0;
+    if(d.active){
+      let b=null;try{b=JSON.parse(localStorage.getItem("ex_"+st.key))}catch(e){}
+      st.start=d.start||Date.now();st.lan=st.n;A=b&&b.A||nul();S=b&&b.S||shuf();viol=[{t:Date.now(),r:"Thoát/tải lại/đóng trang khi đang làm bài"}];
+      await save("Vi phạm: "+viol[0].r,true);return;
+    }
+    if(st.n>=MAXTRY){app.innerHTML=`<div class=card><h1>${st.name}</h1><p class=bad>Em đã dùng hết ${MAXTRY}/${MAXTRY} lượt làm bài.</p><button class=g onclick="login()">Quay lại</button></div>`;return}
+    intro();
+  }catch(e){m.textContent="Không kết nối được máy chủ chấm điểm ("+(e.message||e)+"). Kiểm tra mạng rồi thử lại.";$("#go").disabled=false}
+}
+function intro(){
+  app.innerHTML=`<div class=card><h1>${st.name} – Lớp ${CLS}</h1><p>Đây là lượt <b>${st.n+1}/${MAXTRY}</b>. Thời gian ${TIME} phút, tính từ khi bấm “Bắt đầu”.</p>
+  <ul><li>Không rời khỏi trang này, không chuyển tab, không mở thêm cửa sổ.</li><li>Không chuột phải, sao chép/dán, mở công cụ nhà phát triển hay dùng phím tắt.</li><li>Không tải lại hay đóng trang.</li><li>Vi phạm bất kỳ điều nào → <b>bài bị nộp ngay</b> và ghi vi phạm cho giáo viên.</li></ul>
+  <p class=mu>Điểm: Phần I 12 câu × 0,25; Phần II đúng 1/2/3/4 ý được 0,1/0,25/0,5/1; Phần III 6 câu × 0,5.</p>
+  <button id=st>Bắt đầu làm bài</button><button class=g onclick="login()">Quay lại</button><div id=msg class=bad></div></div>`;
+  $("#st").onclick=start;
+}
+async function start(){
+  $("#st").disabled=true;$("#msg").textContent="Đang kết nối…";st.start=Date.now();
+  try{const r=await api({action:"start",key:st.key,cls:CLS,name:st.name,start:st.start});
+    if(!r.ok)throw new Error(r.error==="max"?"Em đã hết lượt làm bài.":r.error==="active"?"Bài đang mở ở nơi khác, hãy báo giáo viên.":r.error);
+    st.lan=r.n;
+  }catch(e){$("#msg").textContent="Không thể bắt đầu: "+(e.message||e);$("#st").disabled=false;return}
+  A=nul();S=shuf();viol=[];live=true;st.w=innerWidth;persist();
+  render();guards();timer=setInterval(tick,500);tick();
+}
+function render(){
+  let h=`<div id=bar><div><b>${st.name}</b><div class=mu>Lớp ${CLS} · Lượt ${st.lan}/${MAXTRY}</div></div><div id=tm></div></div>
+  <h2>PHẦN I. Trắc nghiệm nhiều phương án lựa chọn</h2>`;
+  S.p1.forEach((x,i)=>{const q=P1[x.q];h+=`<div class=q><b>Câu ${i+1}.</b> ${fmt(q[0])}`+x.o.map((oi,j)=>`<label class=opt><input type=radio name=a${i} data-p=1 data-i=${i} data-j=${j}><b>${"ABCD"[j]}.</b> ${fmt(q[1][oi])}</label>`).join("")+"</div>"});
+  h+="<h2>PHẦN II. Trắc nghiệm đúng sai</h2>";
+  S.p2.forEach((x,i)=>{const q=P2[x.q];h+=`<div class=q><b>Câu ${i+1}.</b> ${fmt(q[0])}`+x.s.map((si,k)=>`<div class=row><span>${"abcd"[k]}) ${fmt(q[1][si])}</span><span><label><input type=radio name=b${i}${k} data-p=2 data-i=${i} data-j=${k} data-v=1> Đúng</label> &nbsp; <label><input type=radio name=b${i}${k} data-p=2 data-i=${i} data-j=${k} data-v=0> Sai</label></span></div>`).join("")+"</div>"});
+  h+="<h2>PHẦN III. Trắc nghiệm trả lời ngắn</h2>";
+  S.p3.forEach((q,i)=>{h+=`<div class=q><b>Câu ${i+1}.</b> ${fmt(P3[q][0])}<div>Trả lời:<input class=a type=text inputmode=decimal autocomplete=off data-p=3 data-i=${i}></div></div>`});
+  h+=`<div class=card><button id=sub>Nộp bài</button><span id=cf class=bad></span></div>`;
+  app.innerHTML=h;
+  app.onchange=app.oninput=e=>{const t=e.target.dataset;if(!t.p)return;
+    if(t.p==1)A.A1[t.i]=+t.j;else if(t.p==2)A.A2[t.i][t.j]=+t.v;else A.A3[t.i]=e.target.value;persist()};
+  let sure=false;$("#sub").onclick=()=>{if(!sure){sure=true;$("#cf").textContent=" Bấm lần nữa để xác nhận nộp bài.";return}submit("Học sinh nộp bài",false)};
+}
+function tick(){
+  const r=TIME*60-Math.floor((Date.now()-st.start)/1000);
+  if(r<=0){submit("Hết giờ",false);return}
+  const t=$("#tm");if(t){t.textContent=pad(Math.floor(r/60))+":"+pad(r%60);t.className=r<300?"bad":""}
+}
+function v(r){ if(!live)return; viol.push({t:Date.now(),r}); submit("Vi phạm: "+r,true) }
+const TAB=Math.random().toString(36).slice(2);let gd=false;
+function guards(){
+  if(gd){try{bc.postMessage({id:TAB})}catch(e){}return}gd=true;
+  const on=(o,e,f,c)=>o.addEventListener(e,f,c);
+  on(document,"visibilitychange",()=>document.hidden&&v("Chuyển tab / thu nhỏ / chuyển cửa sổ khác"));
+  on(window,"blur",()=>v("Rời khỏi cửa sổ làm bài (mở cửa sổ/ứng dụng khác)"));
+  on(window,"pagehide",()=>v("Đóng/tải lại trang"));
+  on(window,"beforeunload",e=>{if(live){e.preventDefault();e.returnValue=""}});
+  on(document,"contextmenu",e=>{e.preventDefault();v("Nhấn chuột phải")});
+  ["copy","cut","paste"].forEach(k=>on(document,k,e=>{e.preventDefault();v("Sao chép/dán nội dung")}));
+  on(document,"keydown",e=>{const k=e.key.toLowerCase(),c=e.ctrlKey||e.metaKey;
+    if(k=="f12"||k=="printscreen"||(c&&e.shiftKey&&"ijcs".includes(k))||(c&&"cvxspu".includes(k))){e.preventDefault();v("Dùng phím tắt bị cấm ("+e.key+")")}});
+  on(window,"resize",()=>{if(Math.abs(innerWidth-st.w)>100)v("Thay đổi kích thước cửa sổ / chia đôi màn hình")});
+  try{bc=new BroadcastChannel("ex02b_all");bc.onmessage=e=>{if(e.data&&e.data.id!==TAB)v("Mở thêm cửa sổ/tab của trang làm bài")};bc.postMessage({id:TAB})}catch(e){}
+}
+function submit(reason,isV){ if(!live)return; live=false;clearInterval(timer);save(reason,isV) }
+async function save(reason,isV){
+  const g=grade(A,S),end=Date.now();
+  const a1=Array(12),a2=P2.map(()=>Array(4)),a3=Array(6);
+  S.p1.forEach((x,i)=>a1[x.q]=A.A1[i]==null?"-":"ABCD"[x.o[A.A1[i]]]);
+  S.p2.forEach((x,i)=>x.s.forEach((o,k)=>a2[x.q][o]=A.A2[i][k]==null?"-":A.A2[i][k]?"Đ":"S"));
+  S.p3.forEach((q,i)=>a3[q]=A.A3[i]||"-");
+  const rec={action:"submit",key:st.key,cls:CLS,name:st.name,lan:st.lan,...g,start:st.start,end,sec:Math.round((end-st.start)/1000),
+    nViol:viol.length,viol:viol.map(x=>clock(x.t)+" "+x.r).join("; "),reason,ans:"I: "+a1.join("")+" | II: "+a2.map(a=>a.join("")).join(",")+" | III: "+a3.join(";")};
+  app.innerHTML=`<div class=card>Đang gửi kết quả…</div>`;
+  const done=async()=>{const x=await api(rec);if(!x.ok)throw new Error(x.error||"lỗi máy chủ");try{localStorage.removeItem("ex_"+st.key)}catch(e){}result({...rec,viol})};
+  try{await done()}catch(e){
+    app.innerHTML=`<div class=card><p class=bad>Gửi kết quả thất bại: ${e.message||e}</p><p>Điểm của em: <b>${g.score}</b>. Bấm thử lại (không được đóng trang).</p><button id=rt>Thử lại</button></div>`;
+    $("#rt").onclick=async()=>{try{await done()}catch(x){$("#rt").textContent="Vẫn lỗi, thử lại"}};
+  }
+}
+function result(r){
+  app.innerHTML=`<div class=card><h1>Đã nộp bài</h1><p><b>${r.name}</b> – Lớp ${r.cls} – Lượt ${r.lan}/${MAXTRY}</p>
+  <p style="font-size:24px">Điểm: <b class="${r.nViol?"bad":"ok"}">${r.score}</b> / 10</p>
+  <p class=mu>Phần I: ${r.p1} · Phần II: ${r.p2} · Phần III: ${r.p3} · Thời gian làm: ${Math.floor(r.sec/60)} phút ${r.sec%60} giây</p>
+  <p>Lý do nộp: ${r.reason}</p>
+  ${r.nViol?`<p class=bad>Vi phạm được ghi nhận:</p><ul>${r.viol.map(x=>`<li>${clock(x.t)} – ${x.r}</li>`).join("")}</ul>`:""}
+  <p class=mu>Kết quả đã được lưu cho giáo viên. ${r.lan<MAXTRY?"Em còn "+(MAXTRY-r.lan)+" lượt làm.":"Em đã hết lượt làm bài."}</p>
+  <button class=g onclick="login()">Về trang đầu</button></div>`;
+}
+init();
+</script></body></html>
